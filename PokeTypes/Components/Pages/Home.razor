@@ -1,0 +1,735 @@
+﻿@page "/"
+@inject NavigationManager Navigation
+
+<PageTitle>New Game</PageTitle>
+
+
+<div class="currentRound">
+    Round @currentCount / 25
+</div>
+
+<div class="flex-container-versus">
+    <div>
+        <img src=@picAttacker class="img-Attacker" alt="Attacker">
+    </div>
+    <div class="versus-img">Vs.</div>
+    <div>
+        <img src=@picDefender class="img-Defender" alt="Defender">
+    </div>
+</div>
+
+<div class="flex-container-subtexts">
+    <div class="text-Attacker">
+        @strAttacker
+    </div>
+    <div class="versus-text">Vs.</div>
+    <div class="text-Defender">
+        @strDefender
+    </div>
+</div>
+
+<div class="flex-container-buttons">
+    <button type="button" id="button0" class="button0" @onclick="clickNoEffect">0x<br />No effect</button>
+    <button type="button" id="button05" class="button05" @onclick="clickNotVeryEffective">0.5x<br />Not very effective</button>
+    <button type="button" id="button1" class="button1" @onclick="clickNormalEffect">1x<br />Normal</button>
+    <button type="button" id="button2" class="button2" @onclick="clickSuperEffect">2x<br />Super Effective</button>
+</div>
+
+
+<div class=@GetResultTextColour()>
+    @resultText
+</div>
+
+
+<div class="score-text">
+    @scoreText
+</div>
+
+
+
+@code {
+    private int currentCount = 0;
+    private int score = 0;
+    private string picAttacker = @"\images\Normal.png";
+    private string picDefender = @"\images\Normal.png";
+    private string strAttacker = "Normal";
+    private string strDefender = "Normal";
+    private PokemonType? Attacker;
+    private PokemonType? Defender;
+    private Random rnd = new Random();
+    public List<PokemonType> PokemonTypeList = new List<PokemonType>();
+    private string resultText = "Result last guess";
+    private string scoreText = "Score: 0";
+
+    private void NewRound()
+    {
+        currentCount++;
+
+        int attackerNumber = rnd.Next(18);
+        int defenderNumber = rnd.Next(18);
+
+        Attacker = PokemonTypeList[attackerNumber];
+        Defender = PokemonTypeList[defenderNumber];
+
+        strAttacker = Attacker.Name;
+        strDefender = Defender.Name;
+
+        picAttacker = @"\images\" + Attacker.Name + ".png";
+        picDefender = @"\images\" + Defender.Name + ".png";
+
+    }
+
+    private void Init()
+    {
+        PokemonTypeList.Clear();
+
+        PokemonType pokemonType = new PokemonType();
+        pokemonType.Number = 0;
+        pokemonType.Name = "Normal";
+        pokemonType.VsNormal = 1;
+        pokemonType.VsFighting = 1;
+        pokemonType.VsFlying = 1;
+        pokemonType.VsPoison = 1;
+        pokemonType.VsGround = 1;
+        pokemonType.VsRock = 0.5;
+        pokemonType.VsBug = 1;
+        pokemonType.VsGhost = 1;
+        pokemonType.VsSteel = 0.5;
+        pokemonType.VsFire = 1;
+        pokemonType.VsWater = 1;
+        pokemonType.VsGrass = 1;
+        pokemonType.VsElectric = 1;
+        pokemonType.VsPsychic = 1;
+        pokemonType.VsIce = 1;
+        pokemonType.VsDragon = 1;
+        pokemonType.VsDark   = 1;
+        pokemonType.VsFairy = 1;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 1;
+        pokemonType.Name = "Fighting";
+        pokemonType.VsNormal = 2;
+        pokemonType.VsFighting = 1;
+        pokemonType.VsFlying = 0.5;
+        pokemonType.VsPoison = 0.5;
+        pokemonType.VsGround = 1;
+        pokemonType.VsRock = 2;
+        pokemonType.VsBug = 0.5;
+        pokemonType.VsGhost = 0;
+        pokemonType.VsSteel = 2;
+        pokemonType.VsFire = 1;
+        pokemonType.VsWater = 1;
+        pokemonType.VsGrass = 1;
+        pokemonType.VsElectric = 1;
+        pokemonType.VsPsychic = 0.5;
+        pokemonType.VsIce = 2;
+        pokemonType.VsDragon = 1;
+        pokemonType.VsDark = 2;
+        pokemonType.VsFairy = 0.5;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 2;
+        pokemonType.Name = "Flying";
+        pokemonType.VsNormal = 1;
+        pokemonType.VsFighting = 2;
+        pokemonType.VsFlying = 1;
+        pokemonType.VsPoison = 1;
+        pokemonType.VsGround = 1;
+        pokemonType.VsRock = 0.5;
+        pokemonType.VsBug = 2;
+        pokemonType.VsGhost = 1;
+        pokemonType.VsSteel = 0.5;
+        pokemonType.VsFire = 1;
+        pokemonType.VsWater = 1;
+        pokemonType.VsGrass = 2;
+        pokemonType.VsElectric = 0.5;
+        pokemonType.VsPsychic = 1;
+        pokemonType.VsIce = 1;
+        pokemonType.VsDragon = 1;
+        pokemonType.VsDark = 1;
+        pokemonType.VsFairy = 1;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 3;
+        pokemonType.Name = "Poison";
+        pokemonType.VsNormal = 1;
+        pokemonType.VsFighting = 1;
+        pokemonType.VsFlying = 1;
+        pokemonType.VsPoison = 0.5;
+        pokemonType.VsGround = 0.5;
+        pokemonType.VsRock = 0.5;
+        pokemonType.VsBug = 1;
+        pokemonType.VsGhost = 0.5;
+        pokemonType.VsSteel = 0;
+        pokemonType.VsFire = 1;
+        pokemonType.VsWater = 1;
+        pokemonType.VsGrass = 2;
+        pokemonType.VsElectric = 1;
+        pokemonType.VsPsychic = 1;
+        pokemonType.VsIce = 1;
+        pokemonType.VsDragon = 1;
+        pokemonType.VsDark = 1;
+        pokemonType.VsFairy = 2;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 4;
+        pokemonType.Name = "Ground";
+        pokemonType.VsNormal = 1;
+        pokemonType.VsFighting = 1;
+        pokemonType.VsFlying = 0;
+        pokemonType.VsPoison = 2;
+        pokemonType.VsGround = 1;
+        pokemonType.VsRock = 2;
+        pokemonType.VsBug = 0.5;
+        pokemonType.VsGhost = 1;
+        pokemonType.VsSteel = 2;
+        pokemonType.VsFire = 2;
+        pokemonType.VsWater = 1;
+        pokemonType.VsGrass = 0.5;
+        pokemonType.VsElectric = 2;
+        pokemonType.VsPsychic = 1;
+        pokemonType.VsIce = 1;
+        pokemonType.VsDragon = 1;
+        pokemonType.VsDark = 1;
+        pokemonType.VsFairy = 1;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 5;
+        pokemonType.Name = "Rock";
+        pokemonType.VsNormal = 1;
+        pokemonType.VsFighting = 0.5;
+        pokemonType.VsFlying = 2;
+        pokemonType.VsPoison = 1;
+        pokemonType.VsGround = 0.5;
+        pokemonType.VsRock = 1;
+        pokemonType.VsBug = 2;
+        pokemonType.VsGhost = 1;
+        pokemonType.VsSteel = 0.5;
+        pokemonType.VsFire = 2;
+        pokemonType.VsWater = 1;
+        pokemonType.VsGrass = 1;
+        pokemonType.VsElectric = 1;
+        pokemonType.VsPsychic = 1;
+        pokemonType.VsIce = 2;
+        pokemonType.VsDragon = 1;
+        pokemonType.VsDark = 1;
+        pokemonType.VsFairy = 1;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 6;
+        pokemonType.Name = "Bug";
+        pokemonType.VsNormal = 1;
+        pokemonType.VsFighting = 0.5;
+        pokemonType.VsFlying = 0.5;
+        pokemonType.VsPoison = 0.5;
+        pokemonType.VsGround = 1;
+        pokemonType.VsRock = 1;
+        pokemonType.VsBug = 1;
+        pokemonType.VsGhost = 0.5;
+        pokemonType.VsSteel = 0.5;
+        pokemonType.VsFire = 0.5;
+        pokemonType.VsWater = 1;
+        pokemonType.VsGrass = 2;
+        pokemonType.VsElectric = 1;
+        pokemonType.VsPsychic = 2;
+        pokemonType.VsIce = 1;
+        pokemonType.VsDragon = 1;
+        pokemonType.VsDark = 2;
+        pokemonType.VsFairy = 0.5;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 7;
+        pokemonType.Name = "Ghost";
+        pokemonType.VsNormal = 0;
+        pokemonType.VsFighting = 1;
+        pokemonType.VsFlying = 1;
+        pokemonType.VsPoison = 1;
+        pokemonType.VsGround = 1;
+        pokemonType.VsRock = 1;
+        pokemonType.VsBug = 1;
+        pokemonType.VsGhost = 2;
+        pokemonType.VsSteel = 1;
+        pokemonType.VsFire = 1;
+        pokemonType.VsWater = 1;
+        pokemonType.VsGrass = 1;
+        pokemonType.VsElectric = 1;
+        pokemonType.VsPsychic = 2;
+        pokemonType.VsIce = 1;
+        pokemonType.VsDragon = 1;
+        pokemonType.VsDark = 0.5;
+        pokemonType.VsFairy = 1;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 8;
+        pokemonType.Name = "Steel";
+        pokemonType.VsNormal = 1;
+        pokemonType.VsFighting = 1;
+        pokemonType.VsFlying = 1;
+        pokemonType.VsPoison = 1;
+        pokemonType.VsGround = 1;
+        pokemonType.VsRock = 2;
+        pokemonType.VsBug = 1;
+        pokemonType.VsGhost = 1;
+        pokemonType.VsSteel = 0.5;
+        pokemonType.VsFire = 0.5;
+        pokemonType.VsWater = 0.5;
+        pokemonType.VsGrass = 1;
+        pokemonType.VsElectric = 0.5;
+        pokemonType.VsPsychic = 1;
+        pokemonType.VsIce = 2;
+        pokemonType.VsDragon = 1;
+        pokemonType.VsDark = 1;
+        pokemonType.VsFairy = 2;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 9;
+        pokemonType.Name = "Fire";
+        pokemonType.VsNormal = 1;
+        pokemonType.VsFighting = 1;
+        pokemonType.VsFlying = 1;
+        pokemonType.VsPoison = 1;
+        pokemonType.VsGround = 1;
+        pokemonType.VsRock = 0.5;
+        pokemonType.VsBug = 2;
+        pokemonType.VsGhost = 1;
+        pokemonType.VsSteel = 2;
+        pokemonType.VsFire = 0.5;
+        pokemonType.VsWater = 0.5;
+        pokemonType.VsGrass = 2;
+        pokemonType.VsElectric = 1;
+        pokemonType.VsPsychic = 1;
+        pokemonType.VsIce = 2;
+        pokemonType.VsDragon = 0.5;
+        pokemonType.VsDark = 1;
+        pokemonType.VsFairy = 1;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 10;
+        pokemonType.Name = "Water";
+        pokemonType.VsNormal = 1;
+        pokemonType.VsFighting = 1;
+        pokemonType.VsFlying = 1;
+        pokemonType.VsPoison = 1;
+        pokemonType.VsGround = 2;
+        pokemonType.VsRock = 2;
+        pokemonType.VsBug = 1;
+        pokemonType.VsGhost = 1;
+        pokemonType.VsSteel = 1;
+        pokemonType.VsFire = 2;
+        pokemonType.VsWater = 0.5;
+        pokemonType.VsGrass = 0.5;
+        pokemonType.VsElectric = 1;
+        pokemonType.VsPsychic = 1;
+        pokemonType.VsIce = 1;
+        pokemonType.VsDragon = 0.5;
+        pokemonType.VsDark = 1;
+        pokemonType.VsFairy = 1;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 11;
+        pokemonType.Name = "Grass";
+        pokemonType.VsNormal = 1;
+        pokemonType.VsFighting = 1;
+        pokemonType.VsFlying = 0.5;
+        pokemonType.VsPoison = 0.5;
+        pokemonType.VsGround = 2;
+        pokemonType.VsRock = 2;
+        pokemonType.VsBug = 0.5;
+        pokemonType.VsGhost = 1;
+        pokemonType.VsSteel = 0.5;
+        pokemonType.VsFire = 0.5;
+        pokemonType.VsWater = 2;
+        pokemonType.VsGrass = 0.5;
+        pokemonType.VsElectric = 1;
+        pokemonType.VsPsychic = 1;
+        pokemonType.VsIce = 1;
+        pokemonType.VsDragon = 0.5;
+        pokemonType.VsDark = 1;
+        pokemonType.VsFairy = 1;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 12;
+        pokemonType.Name = "Electric";
+        pokemonType.VsNormal = 1;
+        pokemonType.VsFighting = 1;
+        pokemonType.VsFlying = 2;
+        pokemonType.VsPoison = 1;
+        pokemonType.VsGround = 0;
+        pokemonType.VsRock = 1;
+        pokemonType.VsBug = 1;
+        pokemonType.VsGhost = 1;
+        pokemonType.VsSteel = 1;
+        pokemonType.VsFire = 1;
+        pokemonType.VsWater = 2;
+        pokemonType.VsGrass = 0.5;
+        pokemonType.VsElectric = 0.5;
+        pokemonType.VsPsychic = 1;
+        pokemonType.VsIce = 1;
+        pokemonType.VsDragon = 0.5;
+        pokemonType.VsDark = 1;
+        pokemonType.VsFairy = 1;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 13;
+        pokemonType.Name = "Psychic";
+        pokemonType.VsNormal = 1;
+        pokemonType.VsFighting = 2;
+        pokemonType.VsFlying = 1;
+        pokemonType.VsPoison = 2;
+        pokemonType.VsGround = 1;
+        pokemonType.VsRock = 1;
+        pokemonType.VsBug = 1;
+        pokemonType.VsGhost = 1;
+        pokemonType.VsSteel = 0.5;
+        pokemonType.VsFire = 1;
+        pokemonType.VsWater = 1;
+        pokemonType.VsGrass = 1;
+        pokemonType.VsElectric = 1;
+        pokemonType.VsPsychic = 0.5;
+        pokemonType.VsIce = 1;
+        pokemonType.VsDragon = 1;
+        pokemonType.VsDark = 0;
+        pokemonType.VsFairy = 1;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 14;
+        pokemonType.Name = "Ice";
+        pokemonType.VsNormal = 1;
+        pokemonType.VsFighting = 1;
+        pokemonType.VsFlying = 2;
+        pokemonType.VsPoison = 1;
+        pokemonType.VsGround = 2;
+        pokemonType.VsRock = 1;
+        pokemonType.VsBug = 1;
+        pokemonType.VsGhost = 1;
+        pokemonType.VsSteel = 0.5;
+        pokemonType.VsFire = 0.5;
+        pokemonType.VsWater = 0.5;
+        pokemonType.VsGrass = 2;
+        pokemonType.VsElectric = 1;
+        pokemonType.VsPsychic = 1;
+        pokemonType.VsIce = 0.5;
+        pokemonType.VsDragon = 2;
+        pokemonType.VsDark = 1;
+        pokemonType.VsFairy = 1;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 15;
+        pokemonType.Name = "Dragon";
+        pokemonType.VsNormal = 1;
+        pokemonType.VsFighting = 1;
+        pokemonType.VsFlying = 1;
+        pokemonType.VsPoison = 1;
+        pokemonType.VsGround = 1;
+        pokemonType.VsRock = 1;
+        pokemonType.VsBug = 1;
+        pokemonType.VsGhost = 1;
+        pokemonType.VsSteel = 0.5;
+        pokemonType.VsFire = 1;
+        pokemonType.VsWater = 1;
+        pokemonType.VsGrass = 1;
+        pokemonType.VsElectric = 1;
+        pokemonType.VsPsychic = 1;
+        pokemonType.VsIce = 1;
+        pokemonType.VsDragon = 2;
+        pokemonType.VsDark = 1;
+        pokemonType.VsFairy = 0;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 16;
+        pokemonType.Name = "Dark";
+        pokemonType.VsNormal = 1;
+        pokemonType.VsFighting = 0.5;
+        pokemonType.VsFlying = 1;
+        pokemonType.VsPoison = 1;
+        pokemonType.VsGround = 1;
+        pokemonType.VsRock = 1;
+        pokemonType.VsBug = 1;
+        pokemonType.VsGhost = 2;
+        pokemonType.VsSteel = 1;
+        pokemonType.VsFire = 1;
+        pokemonType.VsWater = 1;
+        pokemonType.VsGrass = 1;
+        pokemonType.VsElectric = 1;
+        pokemonType.VsPsychic = 2;
+        pokemonType.VsIce = 1;
+        pokemonType.VsDragon = 1;
+        pokemonType.VsDark = 0.5;
+        pokemonType.VsFairy = 0.5;
+        PokemonTypeList.Add(pokemonType);
+
+        pokemonType = new PokemonType();
+        pokemonType.Number = 17;
+        pokemonType.Name = "Fairy";
+        pokemonType.VsNormal = 1;
+        pokemonType.VsFighting = 2;
+        pokemonType.VsFlying = 1;
+        pokemonType.VsPoison = 0.5;
+        pokemonType.VsGround = 1;
+        pokemonType.VsRock = 1;
+        pokemonType.VsBug = 1;
+        pokemonType.VsGhost = 1;
+        pokemonType.VsSteel = 0.5;
+        pokemonType.VsFire = 0.5;
+        pokemonType.VsWater = 1;
+        pokemonType.VsGrass = 1;
+        pokemonType.VsElectric = 1;
+        pokemonType.VsPsychic = 1;
+        pokemonType.VsIce = 1;
+        pokemonType.VsDragon = 2;
+        pokemonType.VsDark = 2;
+        pokemonType.VsFairy = 1;
+        PokemonTypeList.Add(pokemonType);
+    }
+
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += OnLocationChanged;
+    }
+    protected override Task OnInitializedAsync()
+    {
+        Init();
+        NewRound();
+        return base.OnInitializedAsync();
+    }
+
+    private void OnLocationChanged(object sender, LocationChangedEventArgs eventArgs)
+    {
+        currentCount = 0;
+        score = 0;
+        resultText = "Result last guess";
+        scoreText = "Score: 0";
+
+        InvokeAsync(StateHasChanged);
+
+        NewRound();
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+
+    private void clickNoEffect()
+    {
+        if (currentCount >= 25)
+            return;
+
+        if (CorrectAnswer() == 0)
+        {
+            GuessedRight();
+        }
+        else
+        {
+            GuessedWrong();
+        }
+    }
+
+    private void clickNotVeryEffective()
+    {
+        if (currentCount >= 25)
+            return;
+
+        if (CorrectAnswer() == 0.5)
+        {
+            GuessedRight();
+        }
+        else
+        {
+            GuessedWrong();
+        }
+    }
+
+    private void clickNormalEffect()
+    {
+        if (currentCount >= 25)
+            return;
+
+        if (CorrectAnswer() == 1)
+        {
+            GuessedRight();
+        }
+        else
+        {
+            GuessedWrong();
+        }
+    }
+
+    private void clickSuperEffect()
+    {
+        if (currentCount >= 25)
+            return;
+
+        if (CorrectAnswer() == 2)
+        {
+            GuessedRight();
+        }
+        else
+        {
+            GuessedWrong();
+        }
+    }
+
+    private double CorrectAnswer()
+    {
+        if (Defender.Name == "Normal")
+        {
+            return Attacker.VsNormal;
+        }
+        if (Defender.Name == "Fighting")
+        {
+            return Attacker.VsFighting;
+        }
+        if (Defender.Name == "Flying")
+        {
+            return Attacker.VsFlying;
+        }
+        if (Defender.Name == "Poison")
+        {
+            return Attacker.VsPoison;
+        }
+        if (Defender.Name == "Ground")
+        {
+            return Attacker.VsGround;
+        }
+        if (Defender.Name == "Rock")
+        {
+            return Attacker.VsRock;
+        }        
+        if (Defender.Name == "Bug")
+        {
+            return Attacker.VsBug;
+        }
+        if (Defender.Name == "Ghost")
+        {
+            return Attacker.VsGhost;
+        }        
+        if (Defender.Name == "Steel")
+        {
+            return Attacker.VsSteel;
+        }        
+        if (Defender.Name == "Fire")
+        {
+            return Attacker.VsFire;
+        }
+        if (Defender.Name == "Water")
+        {
+            return Attacker.VsWater;
+        }
+        if (Defender.Name == "Grass")
+        {
+            return Attacker.VsGrass;
+        }        
+        if (Defender.Name == "Electric")
+        {
+            return Attacker.VsElectric;
+        }
+        if (Defender.Name == "Psychic")
+        {
+            return Attacker.VsPsychic;
+        }        
+        if (Defender.Name == "Ice")
+        {
+            return Attacker.VsIce;
+        }        
+        if (Defender.Name == "Dragon")
+        {
+            return Attacker.VsDragon;
+        }        
+        if (Defender.Name == "Dark")
+        {
+            return Attacker.VsDark;
+        }
+        if (Defender.Name == "Fairy")
+        {
+            return Attacker.VsFairy;
+        }
+
+        return -1;
+    }
+
+    private void GuessedRight()
+    {
+        score++;
+        scoreText = "Score: " + score.ToString();
+
+        if (CorrectAnswer() == 0)
+        {
+            resultText = "Correct. " + Attacker.Name + " had no effect against " + Defender.Name;
+        }
+        else if (CorrectAnswer() == 0.5)
+        {
+            resultText = "Correct. " + Attacker.Name + " was not very effective against " + Defender.Name;
+        }
+        else if (CorrectAnswer() == 1)
+        {
+            resultText = "Correct. " + Attacker.Name + " was normal effective against " + Defender.Name;
+        }
+        else if (CorrectAnswer() == 2)
+        {
+            resultText = "Correct. " + Attacker.Name + " was super effective against " + Defender.Name;
+        }
+
+        if (currentCount < 25)
+        {
+            NewRound();
+        }
+    }
+
+    private void GuessedWrong()
+    {
+        if (CorrectAnswer() == 0)
+        {
+            resultText = "Sorry. " + Attacker.Name + " had no effect against " + Defender.Name;
+        }
+        else if (CorrectAnswer() == 0.5)
+        {
+            resultText = "Sorry. " + Attacker.Name + " was not very effective against " + Defender.Name;
+        }
+        else if (CorrectAnswer() == 1)
+        {
+            resultText = "Sorry. " + Attacker.Name + " was normal effective against " + Defender.Name;
+        }
+        else if (CorrectAnswer() == 2)
+        {
+            resultText = "Sorry. " + Attacker.Name + " was super effective against " + Defender.Name;
+        }
+
+        if (currentCount < 25)
+        {
+            NewRound();
+        }
+    }
+
+    private string GetResultTextColour()
+    {
+        if (resultText.StartsWith("Correct"))
+        {
+            return "result-text-green";
+        }
+        else if (resultText.StartsWith("Sorry"))
+        {
+            return "result-text-red";
+        }
+
+        return "result-text-yellow";
+    }
+
+
+}
